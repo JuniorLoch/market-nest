@@ -47,7 +47,7 @@ $ npm run start:prod
 
 ## API documentation
 
-### Once the app is running, access the endpoint /api to access the documentation, provided by swagger
+### Once the app is running, access the endpoint `/api` to access the documentation, provided by swagger
 
 ## Test
 

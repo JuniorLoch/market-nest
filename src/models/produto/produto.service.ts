@@ -1,0 +1,77 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateProdutoDto } from './dtos/create-produto.dto';
+import { UpdateProdutoDto } from './dtos/update-produto.dto';
+import Produto from './entities/produto.entity';
+
+@Injectable()
+export class ProdutoService {
+    constructor(
+        @InjectRepository(Produto)
+        private readonly repository: Repository<Produto>,
+    ) {}
+
+    private returnStatus;
+
+    /**
+     *  Verifica a existência da entidade no banco pelo ID informado, caso exista a entidade é
+     *  retornada, caso contrário lança um erro
+     *
+     *  Somente depois de implementar esse método que percebi que ele faz exatamente a mesma coisa
+     *  que this.repository.findOneByOrFail(), útil para ter a mensagem em português no retorno
+     * @date 2022-09-29
+     * @param { number } id id da entidade
+     */
+    private async verifyExistence(id: number) {
+        const tProduto = await this.repository.findOneBy({ id });
+        if (!tProduto) {
+            throw new NotFoundException(`Produto com ID: ${id} não encontrado`);
+        } else {
+            return tProduto;
+        }
+    }
+
+    async findAll() {
+        const tProdutos = await this.repository.find();
+        if (!tProdutos) {
+            this.returnStatus = 0;
+        } else {
+            this.returnStatus = 1;
+        }
+
+        return { status: this.returnStatus, produtos: tProdutos };
+    }
+
+    async findOne(id: number) {
+        const tProduto = await this.verifyExistence(id);
+
+        return tProduto;
+    }
+
+    async create(Produto: CreateProdutoDto) {
+        const tProduto = this.repository.create(Produto);
+        //TEMPORARIO - verificar se é necessário o await antes do return
+        return await this.repository.save(tProduto);
+    }
+
+    async update(id: number, Produto: UpdateProdutoDto) {
+        const tProduto = await this.repository.preload({
+            id,
+            ...Produto,
+        });
+
+        if (!tProduto) {
+            throw new NotFoundException(`Produto com ID: ${id} não encontrado`);
+        }
+
+        //TEMPORARIO - verificar se é necessário o await antes do return
+        return await this.repository.save(tProduto);
+    }
+
+    async remove(id: number) {
+        const tProduto = await this.verifyExistence(id);
+        //TEMPORARIO - verificar se é necessário o await antes do return
+        return await this.repository.remove(tProduto);
+    }
+}

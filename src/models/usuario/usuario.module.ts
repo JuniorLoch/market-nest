@@ -11,5 +11,6 @@ import { UsuarioService } from './usuario.service';
     imports: [TypeOrmModule.forFeature([Usuario]), EnderecoModule],
     controllers: [UsuarioController],
     providers: [UsuarioService],
+    exports: [UsuarioService],
 })
 export class UsuarioModule {}

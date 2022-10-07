@@ -1,6 +1,6 @@
 import { IsOptional } from 'class-validator';
 import Usuario from 'src/models/usuario/entities/usuario.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('endereco')
@@ -26,7 +26,7 @@ class Endereco {
     endereco: string;
 
     @ApiProperty()
-    @ManyToOne(() => Usuario, (usuario) => usuario.endereco)
+    @OneToMany(() => Usuario, (usuario) => usuario.endereco)
     residentes: Usuario[];
 }
 

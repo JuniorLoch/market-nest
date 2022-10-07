@@ -25,6 +25,15 @@ export class UsuarioService {
 
     private returnStatus;
 
+    async findOrCreateByUser(usuario: CreateUsuarioDto) {
+        const tUsuario = await this.verifyExistence(usuario);
+        if (!tUsuario) {
+            return this.create(usuario);
+        } else {
+            return tUsuario;
+        }
+    }
+
     /**
      *  Verifica a existência da entidade no banco pelo ID informado, caso exista a entidade é
      *  retornada, caso contrário lança um erro
@@ -34,12 +43,25 @@ export class UsuarioService {
      * @date 2022-09-29
      * @param { number } id id da entidade
      */
-    private async verifyExistence(id: number) {
-        const tUsuario = await this.repository.findOneBy({ id });
-        if (!tUsuario) {
-            throw new NotFoundException(`Usuário com ID: ${id} não encontrado`);
+    private async verifyExistence(usuario: CreateUsuarioDto | number) {
+        let tusuario;
+        if (typeof usuario == 'number') {
+            var id = usuario;
+            tusuario = await this.repository.findOneBy({ id: usuario });
         } else {
-            return tUsuario;
+            tusuario = await this.repository.findOneBy({
+                nome: usuario.nome,
+                email: usuario.email,
+                endereco: usuario.endereco,
+            });
+        }
+
+        if (typeof usuario == 'number' && !tusuario) {
+            throw new NotFoundException(
+                `usuario ${id ? 'com ID: ' + id : ''} não encontrado`,
+            );
+        } else {
+            return tusuario;
         }
     }
 
@@ -66,9 +88,13 @@ export class UsuarioService {
             );
             // console.log('Resultado do método');
             // console.log(endereco);
-            var tUsuario = this.repository.create({ ...usuario, endereco });
+            var tUsuario = this.repository.create({
+                ...usuario,
+                endereco,
+                ativo: true,
+            });
         } else {
-            var tUsuario = this.repository.create(usuario);
+            var tUsuario = this.repository.create({ ...usuario, ativo: true });
         }
         // console.log('tUsuário');
         // console.log(tUsuario);

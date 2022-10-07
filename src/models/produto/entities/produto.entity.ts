@@ -13,7 +13,7 @@ class Produto {
     ativo: boolean;
 
     @ApiProperty()
-    @Column()
+    @Column({ unique: true })
     nome: string;
 
     @ApiProperty()

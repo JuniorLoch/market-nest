@@ -1,5 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    JoinTable,
+    ManyToMany,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import Usuario from 'src/models/usuario/entities/usuario.entity';
+import Produto from 'src/models/produto/entities/produto.entity';
 
 @Entity('compra')
 class Compra {
@@ -16,12 +25,24 @@ class Compra {
     valorTotal: number;
 
     @ApiProperty()
-    @Column()
-    cliente: string;
+    @ManyToOne(() => Usuario, {
+        eager: true,
+    })
+    cliente: Usuario;
 
     @ApiProperty()
-    @Column()
-    vendedor: string;
+    @ManyToOne(() => Usuario, {
+        eager: true,
+    })
+    vendedor: Usuario;
+
+    @ApiProperty()
+    @ManyToMany(() => Produto, {
+        cascade: true,
+        eager: true,
+    })
+    @JoinTable()
+    produtos: Produto[];
 }
 
 export default Compra;

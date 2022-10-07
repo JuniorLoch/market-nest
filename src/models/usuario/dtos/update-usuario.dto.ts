@@ -1,5 +1,10 @@
 import { CreateUsuarioDto } from './create-usuario.dto';
-import { PartialType } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { IsBoolean, IsOptional } from 'class-validator';
 
-// TEMPORARIO - alterar para Partialtypes quando for trabalhar com o swagger
-export class UpdateUsuarioDto extends PartialType(CreateUsuarioDto) {}
+export class UpdateUsuarioDto extends PartialType(CreateUsuarioDto) {
+    @ApiProperty()
+    @IsOptional()
+    @IsBoolean()
+    readonly ativo: boolean;
+}

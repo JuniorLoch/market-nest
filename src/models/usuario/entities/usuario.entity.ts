@@ -8,6 +8,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import Compra from 'src/models/compra/entities/compra.entity';
 
 @Entity('pessoa')
 class Usuario {

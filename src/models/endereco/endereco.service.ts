@@ -71,8 +71,7 @@ export class EnderecoService {
 
     async create(Endereco: CreateEnderecoDto) {
         const tEndereco = this.repository.create(Endereco);
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.save(tEndereco);
+        return this.repository.save(tEndereco);
     }
 
     async update(id: number, Endereco: UpdateEnderecoDto) {
@@ -85,13 +84,11 @@ export class EnderecoService {
                 `Endereco com ID: ${id} não encontrada`,
             );
         }
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.save(tEndereco);
+        return this.repository.save(tEndereco);
     }
 
     async remove(id: number) {
         const tEndereco = await this.verifyExistence(id);
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.remove(tEndereco);
+        return this.repository.remove(tEndereco);
     }
 }

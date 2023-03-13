@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateProdutoDto } from '../produto/dtos/create-produto.dto';
 import { ProdutoService } from '../produto/produto.service';
 import { UsuarioService } from '../usuario/usuario.service';
 import { CreateCompraDto } from './dtos/create-compra.dto';
@@ -84,8 +83,7 @@ export class CompraService {
         } else {
             var tCompra = this.repository.create(compra);
         }
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.save(tCompra);
+        return this.repository.save(tCompra);
     }
 
     async update(id: number, compra: UpdateCompraDto) {
@@ -115,13 +113,11 @@ export class CompraService {
             throw new NotFoundException(`Compra com ID: ${id} não encontrado`);
         }
 
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.save(tCompra);
+        return this.repository.save(tCompra);
     }
 
     async remove(id: number) {
         const tCompra = await this.verifyExistence(id);
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.remove(tCompra);
+        return this.repository.remove(tCompra);
     }
 }

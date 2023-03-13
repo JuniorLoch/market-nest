@@ -71,8 +71,7 @@ export class ProdutoService {
 
     async create(Produto: CreateProdutoDto) {
         const tProduto = this.repository.create(Produto);
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.save(tProduto);
+        return this.repository.save(tProduto);
     }
 
     async update(id: number, Produto: UpdateProdutoDto) {
@@ -85,13 +84,11 @@ export class ProdutoService {
             throw new NotFoundException(`Produto com ID: ${id} não encontrado`);
         }
 
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.save(tProduto);
+        return this.repository.save(tProduto);
     }
 
     async remove(id: number) {
         const tProduto = await this.verifyExistence(id);
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.remove(tProduto);
+        return this.repository.remove(tProduto);
     }
 }

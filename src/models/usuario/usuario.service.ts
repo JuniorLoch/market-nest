@@ -2,15 +2,11 @@ import {
     Injectable,
     NotFoundException,
     BadRequestException,
-    forwardRef,
-    Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { validate, validateOrReject } from 'class-validator';
 import { Repository } from 'typeorm';
 import { CreateEnderecoDto } from '../endereco/dtos/create-endereco.dto';
 import { EnderecoService } from '../endereco/endereco.service';
-import Endereco from '../endereco/entities/endereco.entity';
 import { CreateUsuarioDto } from './dtos/create-usuario.dto';
 import { UpdateUsuarioDto } from './dtos/update-usuario.dto';
 import Usuario from './entities/usuario.entity';
@@ -96,10 +92,7 @@ export class UsuarioService {
         } else {
             var tUsuario = this.repository.create({ ...usuario, ativo: true });
         }
-        // console.log('tUsuário');
-        // console.log(tUsuario);
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.save(tUsuario);
+        return this.repository.save(tUsuario);
     }
 
     async update(id: number, usuario: UpdateUsuarioDto) {
@@ -125,13 +118,11 @@ export class UsuarioService {
             throw new NotFoundException(`Usuário com ID: ${id} não encontrado`);
         }
 
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.save(tUsuario);
+        return this.repository.save(tUsuario);
     }
 
     async remove(id: number) {
         const tUsuario = await this.verifyExistence(id);
-        //TEMPORARIO - verificar se é necessário o await antes do return
-        return await this.repository.remove(tUsuario);
+        return this.repository.remove(tUsuario);
     }
 }
